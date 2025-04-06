@@ -3,7 +3,7 @@ package infrastructure
 import (
 	"fmt"
 
-	"github.com/bayu-aditya/ideagate/backend/core/config"
+	"github.com/ideagate/core/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

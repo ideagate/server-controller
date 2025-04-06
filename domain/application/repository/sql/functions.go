@@ -3,7 +3,7 @@ package sql
 import (
 	"context"
 
-	"github.com/bayu-aditya/ideagate/backend/server/controller/domain/application/model"
+	"github.com/ideagate/server-controller/domain/application/model"
 	"gorm.io/gorm"
 )
 

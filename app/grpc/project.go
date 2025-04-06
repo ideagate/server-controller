@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 
-	"github.com/bayu-aditya/ideagate/backend/model/gen-go/dashboard"
-	"github.com/bayu-aditya/ideagate/backend/server/controller/domain/project/usecase"
+	"github.com/ideagate/model/gen-go/dashboard"
+	"github.com/ideagate/server-controller/domain/project/usecase"
 )
 
 func (s *DashboardServiceServer) GetListProject(ctx context.Context, req *dashboard.GetListProjectRequest) (*dashboard.GetListProjectResponse, error) {

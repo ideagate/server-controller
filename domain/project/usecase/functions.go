@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
-	"github.com/bayu-aditya/ideagate/backend/core/utils/errors"
-	pbproject "github.com/bayu-aditya/ideagate/backend/model/gen-go/core/project"
-	"github.com/bayu-aditya/ideagate/backend/server/controller/domain/project/repository/sql"
+	"github.com/ideagate/core/utils/errors"
+	pbproject "github.com/ideagate/model/gen-go/core/project"
+	"github.com/ideagate/server-controller/domain/project/repository/sql"
 )
 
 func NewProjectUsecase(repoProject sql.ProjectSQLRepository) ProjectUsecase {

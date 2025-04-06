@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/bayu-aditya/ideagate/backend/core/config"
-	"github.com/bayu-aditya/ideagate/backend/core/utils/log"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/ideagate/core/config"
+	"github.com/ideagate/core/utils/log"
 	"github.com/urfave/cli/v2"
 )
 

@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/bayu-aditya/ideagate/backend/core/config"
+	"github.com/ideagate/core/config"
 	"gorm.io/gorm"
 )
 

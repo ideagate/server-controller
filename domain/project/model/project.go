@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	pbproject "github.com/bayu-aditya/ideagate/backend/model/gen-go/core/project"
+	pbproject "github.com/ideagate/model/gen-go/core/project"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
 )

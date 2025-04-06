@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	pbapplication "github.com/bayu-aditya/ideagate/backend/model/gen-go/core/application"
+	pbapplication "github.com/ideagate/model/gen-go/core/application"
 )
 
 type ApplicationUsecase interface {

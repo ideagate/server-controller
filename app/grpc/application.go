@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
-	"github.com/bayu-aditya/ideagate/backend/core/utils"
-	"github.com/bayu-aditya/ideagate/backend/model/gen-go/dashboard"
-	"github.com/bayu-aditya/ideagate/backend/server/controller/domain/application/usecase"
+	"github.com/ideagate/core/utils"
+	"github.com/ideagate/model/gen-go/dashboard"
+	"github.com/ideagate/server-controller/domain/application/usecase"
 )
 
 func (s *DashboardServiceServer) GetListApplication(ctx context.Context, req *dashboard.GetListApplicationRequest) (*dashboard.GetListApplicationResponse, error) {

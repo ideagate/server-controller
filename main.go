@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"github.com/bayu-aditya/ideagate/backend/core/utils/log"
-	"github.com/bayu-aditya/ideagate/backend/server/controller/app/grpc"
-	"github.com/bayu-aditya/ideagate/backend/server/controller/app/migration"
+	"github.com/ideagate/core/utils/log"
+	"github.com/ideagate/server-controller/app/grpc"
+	"github.com/ideagate/server-controller/app/migration"
 	"github.com/urfave/cli/v2"
 )
 
