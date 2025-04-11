@@ -9,6 +9,7 @@ import (
 	"github.com/ideagate/model/gen-go/dashboard"
 	apprepositorysql "github.com/ideagate/server-controller/domain/application/repository/sql"
 	appusecase "github.com/ideagate/server-controller/domain/application/usecase"
+	"github.com/ideagate/server-controller/domain/entrypoint"
 	projectrepositorysql "github.com/ideagate/server-controller/domain/project/repository/sql"
 	projectusecase "github.com/ideagate/server-controller/domain/project/usecase"
 	"github.com/ideagate/server-controller/infrastructure"
@@ -99,6 +100,7 @@ type DashboardServiceServer struct {
 
 	usecaseProject     projectusecase.ProjectUsecase
 	usecaseApplication appusecase.ApplicationUsecase
+	domainEntrypoint   entrypoint.Domain
 }
 
 func NewDashboardServiceServer(infra *infrastructure.Infrastructure) *DashboardServiceServer {
@@ -111,6 +113,9 @@ func NewDashboardServiceServer(infra *infrastructure.Infrastructure) *DashboardS
 	usecaseApplication := appusecase.NewApplicationUsecase(repoApplication)
 
 	return &DashboardServiceServer{
+		domainEntrypoint: entrypoint.New(infra.Postgres),
+
+		// TODO: change using domain initialization like entrypoint
 		usecaseProject:     usecaseProject,
 		usecaseApplication: usecaseApplication,
 	}
