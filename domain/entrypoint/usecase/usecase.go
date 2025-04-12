@@ -5,22 +5,21 @@ import (
 
 	"github.com/ideagate/core/utils"
 	pbEndpoint "github.com/ideagate/model/gen-go/core/endpoint"
-	"github.com/ideagate/server-controller/domain/entrypoint"
 	"github.com/ideagate/server-controller/domain/entrypoint/model"
 	"github.com/ideagate/server-controller/domain/entrypoint/repository/sql"
 )
 
-func New(repoSql sql.Repository) entrypoint.Domain {
-	return &usecase{
+func New(repoSql sql.Repository) *Usecase {
+	return &Usecase{
 		repoSql: repoSql,
 	}
 }
 
-type usecase struct {
+type Usecase struct {
 	repoSql sql.Repository
 }
 
-func (u *usecase) GetListEntrypoint(ctx context.Context, req *entrypoint.GetListEntrypointRequest) (*entrypoint.GetListEntrypointResponse, error) {
+func (u *Usecase) GetListEntrypoint(ctx context.Context, req *GetListEntrypointRequest) (*GetListEntrypointResponse, error) {
 	if req.ProjectID == "" {
 		return nil, model.ErrProjectIDRequired
 	}
@@ -38,7 +37,7 @@ func (u *usecase) GetListEntrypoint(ctx context.Context, req *entrypoint.GetList
 		return nil, err
 	}
 
-	result := &entrypoint.GetListEntrypointResponse{
+	result := &GetListEntrypointResponse{
 		Entrypoints: make([]*pbEndpoint.Endpoint, len(resultRepo)),
 	}
 
@@ -49,7 +48,7 @@ func (u *usecase) GetListEntrypoint(ctx context.Context, req *entrypoint.GetList
 	return result, nil
 }
 
-func (u *usecase) GetEntrypoint(ctx context.Context, req *entrypoint.GetEntrypointRequest) (*entrypoint.GetEntrypointResponse, error) {
+func (u *Usecase) GetEntrypoint(ctx context.Context, req *GetEntrypointRequest) (*GetEntrypointResponse, error) {
 	if req.ProjectID == "" {
 		return nil, model.ErrProjectIDRequired
 	}
@@ -75,12 +74,12 @@ func (u *usecase) GetEntrypoint(ctx context.Context, req *entrypoint.GetEntrypoi
 		return nil, model.ErrEntrypointNotFound
 	}
 
-	return &entrypoint.GetEntrypointResponse{
+	return &GetEntrypointResponse{
 		Entrypoint: dataEntrypoint.ToProto(),
 	}, nil
 }
 
-func (u *usecase) CreateEntrypoint(ctx context.Context, req *entrypoint.CreateEntrypointRequest) error {
+func (u *Usecase) CreateEntrypoint(ctx context.Context, req *CreateEntrypointRequest) error {
 	// Validate request
 	if req.Entrypoint.GetProjectId() == "" {
 		return model.ErrProjectIDRequired
@@ -107,7 +106,7 @@ func (u *usecase) CreateEntrypoint(ctx context.Context, req *entrypoint.CreateEn
 	return nil
 }
 
-func (u *usecase) DeleteEntrypoint(ctx context.Context, req *entrypoint.DeleteEntrypointRequest) error {
+func (u *Usecase) DeleteEntrypoint(ctx context.Context, req *DeleteEntrypointRequest) error {
 	// Validate request
 	if req.ProjectID == "" {
 		return model.ErrProjectIDRequired

@@ -6,7 +6,7 @@ import (
 	"github.com/ideagate/core/utils/errors"
 	pbendpoint "github.com/ideagate/model/gen-go/core/endpoint"
 	"github.com/ideagate/model/gen-go/dashboard"
-	"github.com/ideagate/server-controller/domain/entrypoint"
+	"github.com/ideagate/server-controller/domain/entrypoint/usecase"
 )
 
 func (s *DashboardServiceServer) GetListEndpoint(ctx context.Context, req *dashboard.GetListEndpointRequest) (*dashboard.GetListEndpointResponse, error) {
@@ -16,7 +16,7 @@ func (s *DashboardServiceServer) GetListEndpoint(ctx context.Context, req *dashb
 
 	// Check if getting a specific entrypoint
 	if req.GetEndpointId() != "" {
-		resultEntrypoint, err := s.domainEntrypoint.GetEntrypoint(ctx, &entrypoint.GetEntrypointRequest{
+		resultEntrypoint, err := s.domainEntrypoint.GetEntrypoint(ctx, &usecase.GetEntrypointRequest{
 			ProjectID:     req.GetProjectId(),
 			ApplicationID: req.GetApplicationId(),
 			EntrypointID:  req.GetEndpointId(),
@@ -31,7 +31,7 @@ func (s *DashboardServiceServer) GetListEndpoint(ctx context.Context, req *dashb
 	}
 
 	// Get list of entrypoints
-	requestEntrypoints := &entrypoint.GetListEntrypointRequest{
+	requestEntrypoints := &usecase.GetListEntrypointRequest{
 		ProjectID:     req.GetProjectId(),
 		ApplicationID: req.GetApplicationId(),
 	}
@@ -52,7 +52,7 @@ func (s *DashboardServiceServer) CreateEndpoint(ctx context.Context, req *dashbo
 	}
 
 	// Create entrypoint
-	requestCreate := &entrypoint.CreateEntrypointRequest{
+	requestCreate := &usecase.CreateEntrypointRequest{
 		Entrypoint: req.GetEndpoint(),
 	}
 
@@ -69,7 +69,7 @@ func (s *DashboardServiceServer) DeleteEndpoint(ctx context.Context, req *dashbo
 	}
 
 	// Delete entrypoint
-	requestDelete := &entrypoint.DeleteEntrypointRequest{
+	requestDelete := &usecase.DeleteEntrypointRequest{
 		ProjectID:     req.GetProjectId(),
 		ApplicationID: req.GetApplicationId(),
 		EntrypointID:  req.GetEndpointId(),
