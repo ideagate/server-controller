@@ -12,6 +12,8 @@ import (
 type Domain interface {
 	GetListEntrypoint(ctx context.Context, req *GetListEntrypointRequest) (*GetListEntrypointResponse, error)
 	GetEntrypoint(ctx context.Context, req *GetEntrypointRequest) (*GetEntrypointResponse, error)
+	CreateEntrypoint(ctx context.Context, req *CreateEntrypointRequest) error
+	DeleteEntrypoint(ctx context.Context, req *DeleteEntrypointRequest) error
 }
 
 func New(db *gorm.DB) Domain {
@@ -37,4 +39,14 @@ type GetEntrypointRequest struct {
 
 type GetEntrypointResponse struct {
 	Entrypoint *pbendpoint.Endpoint
+}
+
+type CreateEntrypointRequest struct {
+	Entrypoint *pbendpoint.Endpoint
+}
+
+type DeleteEntrypointRequest struct {
+	ProjectID     string
+	ApplicationID string
+	EntrypointID  string
 }

@@ -53,6 +53,21 @@ func (e *Entrypoint) ToProto() *pbendpoint.Endpoint {
 	}
 }
 
+func (e *Entrypoint) FromProto(entrypoint *pbendpoint.Endpoint) {
+	var entrypointType EntrypointType
+	entrypointType.FromProto(entrypoint.GetType())
+
+	e.ID = entrypoint.Id
+	e.ApplicationID = entrypoint.ApplicationId
+	e.ProjectID = entrypoint.ProjectId
+	e.CreatedAt = entrypoint.CreatedAt.AsTime()
+	e.UpdatedAt = entrypoint.UpdatedAt.AsTime()
+	e.Type = entrypointType.String()
+	e.Name = datatypes.NullString{V: entrypoint.Name, Valid: true}
+	e.Description = datatypes.NullString{V: entrypoint.Description, Valid: true}
+	e.fromProtoSettings(entrypoint)
+}
+
 func (e *Entrypoint) toProtoSettings() *pbendpoint.Endpoint {
 	result := &pbendpoint.Endpoint{}
 	settingsJson, _ := e.Settings.MarshalJSON()
@@ -78,4 +93,18 @@ func (e *Entrypoint) toProtoSettings() *pbendpoint.Endpoint {
 	}
 
 	return result
+}
+
+func (e *Entrypoint) fromProtoSettings(entrypoint *pbendpoint.Endpoint) {
+	var settingsJson []byte
+	switch EntrypointType(e.Type) {
+	case EntryPointRest:
+		settingsJson, _ = json.Marshal(entrypoint.GetSettingRest())
+	case EntryPointCron:
+		settingsJson, _ = json.Marshal(entrypoint.GetSettingCron())
+	}
+
+	if settingsJson != nil {
+		_ = e.Settings.UnmarshalJSON(settingsJson)
+	}
 }

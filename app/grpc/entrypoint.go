@@ -45,3 +45,39 @@ func (s *DashboardServiceServer) GetListEndpoint(ctx context.Context, req *dashb
 		Endpoints: resultEntrypoints.Entrypoints,
 	}, nil
 }
+
+func (s *DashboardServiceServer) CreateEndpoint(ctx context.Context, req *dashboard.CreateEndpointRequest) (*dashboard.CreateEndpointResponse, error) {
+	if req.GetEndpoint() == nil {
+		return nil, errors.New("endpoint are required")
+	}
+
+	// Create entrypoint
+	requestCreate := &entrypoint.CreateEntrypointRequest{
+		Entrypoint: req.GetEndpoint(),
+	}
+
+	if err := s.domainEntrypoint.CreateEntrypoint(ctx, requestCreate); err != nil {
+		return nil, err
+	}
+
+	return &dashboard.CreateEndpointResponse{}, nil
+}
+
+func (s *DashboardServiceServer) DeleteEndpoint(ctx context.Context, req *dashboard.DeleteEndpointRequest) (*dashboard.DeleteEndpointResponse, error) {
+	if req.GetProjectId() == "" || req.GetApplicationId() == "" || req.GetEndpointId() == "" {
+		return nil, errors.New("project_id, application_id and endpoint_id are required")
+	}
+
+	// Delete entrypoint
+	requestDelete := &entrypoint.DeleteEntrypointRequest{
+		ProjectID:     req.GetProjectId(),
+		ApplicationID: req.GetApplicationId(),
+		EntrypointID:  req.GetEndpointId(),
+	}
+
+	if err := s.domainEntrypoint.DeleteEntrypoint(ctx, requestDelete); err != nil {
+		return nil, err
+	}
+
+	return &dashboard.DeleteEndpointResponse{}, nil
+}

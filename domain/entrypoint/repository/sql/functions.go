@@ -46,14 +46,32 @@ func (r *repository) GetEntrypoint(ctx context.Context, req *GetEntrypointReques
 		Where("id = ?", req.EntrypointID)
 
 	var entrypoint model.Entrypoint
-
-	err := session.
-		Take(&entrypoint).
-		Error
-
-	if err != nil {
+	if err := session.Take(&entrypoint).Error; err != nil {
 		return nil, err
 	}
 
 	return &entrypoint, nil
+}
+
+func (r *repository) CreateEntrypoint(ctx context.Context, req *CreateEntrypointRequest) error {
+	session := r.db.WithContext(ctx)
+
+	if err := session.Create(req.Entrypoint).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *repository) DeleteEntrypoint(ctx context.Context, req *DeleteEntrypointRequest) error {
+	session := r.db.WithContext(ctx).
+		Where("project_id = ?", req.ProjectID).
+		Where("application_id = ?", req.ApplicationID).
+		Where("id = ?", req.EntrypointID)
+
+	if err := session.Delete(&model.Entrypoint{}).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

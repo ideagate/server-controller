@@ -9,6 +9,8 @@ import (
 type Repository interface {
 	GetListEntrypoint(ctx context.Context, req *GetListEntrypointRequest) ([]*model.Entrypoint, error)
 	GetEntrypoint(ctx context.Context, req *GetEntrypointRequest) (*model.Entrypoint, error)
+	CreateEntrypoint(ctx context.Context, req *CreateEntrypointRequest) error
+	DeleteEntrypoint(ctx context.Context, req *DeleteEntrypointRequest) error
 }
 
 type GetListEntrypointRequest struct {
@@ -18,6 +20,16 @@ type GetListEntrypointRequest struct {
 }
 
 type GetEntrypointRequest struct {
+	ProjectID     string
+	ApplicationID string
+	EntrypointID  string
+}
+
+type CreateEntrypointRequest struct {
+	Entrypoint *model.Entrypoint
+}
+
+type DeleteEntrypointRequest struct {
 	ProjectID     string
 	ApplicationID string
 	EntrypointID  string

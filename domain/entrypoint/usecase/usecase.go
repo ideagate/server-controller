@@ -79,3 +79,56 @@ func (u *usecase) GetEntrypoint(ctx context.Context, req *entrypoint.GetEntrypoi
 		Entrypoint: dataEntrypoint.ToProto(),
 	}, nil
 }
+
+func (u *usecase) CreateEntrypoint(ctx context.Context, req *entrypoint.CreateEntrypointRequest) error {
+	// Validate request
+	if req.Entrypoint.GetProjectId() == "" {
+		return model.ErrProjectIDRequired
+	}
+
+	if req.Entrypoint.GetApplicationId() == "" {
+		return model.ErrApplicationIDRequired
+	}
+
+	if req.Entrypoint.GetId() == "" {
+		return model.ErrEntrypointIDRequired
+	}
+
+	// Create entrypoint
+	var entrypointData model.Entrypoint
+	entrypointData.FromProto(req.Entrypoint)
+
+	if err := u.repoSql.CreateEntrypoint(ctx, &sql.CreateEntrypointRequest{
+		Entrypoint: &entrypointData,
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *usecase) DeleteEntrypoint(ctx context.Context, req *entrypoint.DeleteEntrypointRequest) error {
+	// Validate request
+	if req.ProjectID == "" {
+		return model.ErrProjectIDRequired
+	}
+
+	if req.ApplicationID == "" {
+		return model.ErrApplicationIDRequired
+	}
+
+	if req.EntrypointID == "" {
+		return model.ErrEntrypointIDRequired
+	}
+
+	// Delete entrypoint
+	if err := u.repoSql.DeleteEntrypoint(ctx, &sql.DeleteEntrypointRequest{
+		ProjectID:     req.ProjectID,
+		ApplicationID: req.ApplicationID,
+		EntrypointID:  req.EntrypointID,
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}
