@@ -60,17 +60,3 @@ type Endpoint struct {
 func (e *Endpoint) TableName() string {
 	return "endpoint"
 }
-
-type Workflow struct {
-	Version       int
-	EndpointID    string
-	ApplicationID string
-	ProjectID     string
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-	Data          pgtype.JSONB `gorm:"type:jsonb"`
-}
-
-func (w *Workflow) TableName() string {
-	return "workflow"
-}

@@ -12,6 +12,7 @@ import (
 	"github.com/ideagate/server-controller/domain/entrypoint"
 	projectrepositorysql "github.com/ideagate/server-controller/domain/project/repository/sql"
 	projectusecase "github.com/ideagate/server-controller/domain/project/usecase"
+	"github.com/ideagate/server-controller/domain/workflow"
 	"github.com/ideagate/server-controller/infrastructure"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/urfave/cli/v2"
@@ -101,6 +102,7 @@ type DashboardServiceServer struct {
 	usecaseProject     projectusecase.ProjectUsecase
 	usecaseApplication appusecase.ApplicationUsecase
 	domainEntrypoint   entrypoint.Domain
+	domainWorkflow     workflow.Domain
 }
 
 func NewDashboardServiceServer(infra *infrastructure.Infrastructure) *DashboardServiceServer {
@@ -114,6 +116,7 @@ func NewDashboardServiceServer(infra *infrastructure.Infrastructure) *DashboardS
 
 	return &DashboardServiceServer{
 		domainEntrypoint: entrypoint.New(infra.Postgres),
+		domainWorkflow:   workflow.New(infra.Postgres),
 
 		// TODO: change using domain initialization like entrypoint
 		usecaseProject:     usecaseProject,
