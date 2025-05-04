@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/ideagate/core/utils"
-	pbEndpoint "github.com/ideagate/model/gen-go/core/endpoint"
-	"github.com/ideagate/server-controller/domain/entrypoint/model"
+	pbendpoint "github.com/ideagate/model/gen-go/core/endpoint"
+	modelentrypoint "github.com/ideagate/server-controller/domain/entrypoint/model"
 	"github.com/ideagate/server-controller/domain/entrypoint/repository/sql"
+	"github.com/ideagate/server-controller/model"
 )
 
 func New(repoSql sql.Repository) *Usecase {
@@ -31,14 +32,14 @@ func (u *Usecase) GetListEntrypoint(ctx context.Context, req *GetListEntrypointR
 	resultRepo, err := u.repoSql.GetListEntrypoint(ctx, &sql.GetListEntrypointRequest{
 		ProjectID:     req.ProjectID,
 		ApplicationID: req.ApplicationID,
-		Type:          utils.ToPtr(model.EntryPointRest.String()),
+		Type:          utils.ToPtr(modelentrypoint.EntryPointRest.String()),
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	result := &GetListEntrypointResponse{
-		Entrypoints: make([]*pbEndpoint.Endpoint, len(resultRepo)),
+		Entrypoints: make([]*pbendpoint.Endpoint, len(resultRepo)),
 	}
 
 	for i := 0; i < len(resultRepo); i++ {
@@ -94,7 +95,7 @@ func (u *Usecase) CreateEntrypoint(ctx context.Context, req *CreateEntrypointReq
 	}
 
 	// Create entrypoint
-	var entrypointData model.Entrypoint
+	var entrypointData modelentrypoint.Entrypoint
 	entrypointData.FromProto(req.Entrypoint)
 
 	if err := u.repoSql.CreateEntrypoint(ctx, &sql.CreateEntrypointRequest{
