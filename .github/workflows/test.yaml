@@ -4,9 +4,14 @@ on:
   push:
     branches:
       - '**'
+      - '!main'
+
+env:
+  IMAGE_NAME: ideagate-server-controller
 
 jobs:
   test:
+    name: Go Test
     runs-on: ubuntu-latest
 
     steps:
@@ -35,6 +40,7 @@ jobs:
         run: go test ./... -v
 
   docker-image-build:
+    name: Build Docker Image
     runs-on: ubuntu-latest
     needs: test
 
@@ -42,7 +48,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build Docker image
+      - id: commit
+        uses: prompt/actions-commit-hash@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }}
+
+      - name: Get size of the image
         run: |
-          docker build -t server-controller:latest .
-          docker images server-controller:latest --format "Image Size: {{.Size}}"
+          docker images ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }} --format "Image Size: {{.Size}}"
