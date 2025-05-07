@@ -17,6 +17,8 @@ import (
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/urfave/cli/v2"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -46,6 +48,7 @@ func Action(_ *cli.Context) error {
 	// Register gRPC services
 	s := grpc.NewServer()
 	dashboard.RegisterDashboardServiceServer(s, NewDashboardServiceServer(infra))
+	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
 
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
