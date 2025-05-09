@@ -7,6 +7,7 @@ on:
       - '!main'
 
 env:
+  DOCKER_USERNAME: bayu3490
   IMAGE_NAME: ideagate-server-controller
 
 jobs:
@@ -43,6 +44,10 @@ jobs:
     name: Build Docker Image
     runs-on: ubuntu-latest
     needs: test
+    outputs:
+      image-name-tag: ${{ steps.generate-image-name.outputs.image-name-tag }}
+      image-name: ${{ steps.generate-image-name.outputs.image-name }}
+      image-tag: ${{ steps.generate-image-name.outputs.image-tag }}
 
     steps:
       - name: Checkout code
@@ -54,13 +59,53 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: false
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }}
-
-      - name: Get size of the image
+      - name: Generate Image Name
+        id: generate-image-name
         run: |
-          docker images ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }} --format "Image Size: {{.Size}}"
+          echo "image-name-tag=${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
+          echo "image-name=${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
+          echo "image-tag=${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
+
+#      - name: Build
+#        uses: docker/build-push-action@v6
+#        with:
+#          context: .
+#          push: false
+#          tags: ${{ steps.generate-image-name.outputs.image-name-tag }}
+#
+#      - name: Get size of the image
+#        run: |
+#          docker images ${{ steps.generate-image-name.outputs.image-name-tag }} --format "Image Size: {{.Size}}"
+
+  update-infrastructure:
+    name: Update Infrastructure
+    runs-on: ubuntu-latest
+    needs: docker-image-build
+
+    steps:
+      - name: Checkout Infrastructure Repo
+        uses: actions/checkout@v3
+        with:
+          token: '${{ secrets.GH_TOKEN }}'
+          fetch-depth: 0
+          repository: ideagate/infrastructure
+          ref: main
+          path: deployment
+
+      - name: Push Promoted Image to Infrastructure Repo
+        uses: kustomize-everything/action-promote@v3.7.2
+        id: promote
+        with:
+          target-repo: ideagate/infrastructure
+          target-branch: main
+          working-directory: deployment
+          images: |-
+            [
+              {
+                "name": "server-controller",
+                "newName": "${{ needs.docker-image-build.outputs.image-name }}",
+                "newTag": "${{ needs.docker-image-build.outputs.image-tag }}",
+                "overlays": ["apps/server-controller/overlays/staging"]
+              }
+            ]
+          github-token: ${{ secrets.GH_TOKEN }}
