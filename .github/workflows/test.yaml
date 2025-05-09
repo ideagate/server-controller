@@ -66,46 +66,13 @@ jobs:
           echo "image-name=${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
           echo "image-tag=${{ steps.commit.outputs.short }}" >> $GITHUB_OUTPUT
 
-#      - name: Build
-#        uses: docker/build-push-action@v6
-#        with:
-#          context: .
-#          push: false
-#          tags: ${{ steps.generate-image-name.outputs.image-name-tag }}
-#
-#      - name: Get size of the image
-#        run: |
-#          docker images ${{ steps.generate-image-name.outputs.image-name-tag }} --format "Image Size: {{.Size}}"
-
-  update-infrastructure:
-    name: Update Infrastructure
-    runs-on: ubuntu-latest
-    needs: docker-image-build
-
-    steps:
-      - name: Checkout Infrastructure Repo
-        uses: actions/checkout@v3
+      - name: Build
+        uses: docker/build-push-action@v6
         with:
-          token: '${{ secrets.GH_TOKEN }}'
-          fetch-depth: 0
-          repository: ideagate/infrastructure
-          ref: main
-          path: deployment
+          context: .
+          push: false
+          tags: ${{ steps.generate-image-name.outputs.image-name-tag }}
 
-      - name: Push Promoted Image to Infrastructure Repo
-        uses: kustomize-everything/action-promote@v3.7.2
-        id: promote
-        with:
-          target-repo: ideagate/infrastructure
-          target-branch: main
-          working-directory: deployment
-          images: |-
-            [
-              {
-                "name": "server-controller",
-                "newName": "${{ needs.docker-image-build.outputs.image-name }}",
-                "newTag": "${{ needs.docker-image-build.outputs.image-tag }}",
-                "overlays": ["apps/server-controller/overlays/staging"]
-              }
-            ]
-          github-token: ${{ secrets.GH_TOKEN }}
+      - name: Get size of the image
+        run: |
+          docker images ${{ steps.generate-image-name.outputs.image-name-tag }} --format "Image Size: {{.Size}}"
