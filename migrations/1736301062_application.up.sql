@@ -32,7 +32,7 @@ create table if not exists workflow (
     project_id varchar(20) not null,
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
-    data jsonb not null default '{}',
+    data_bytes bytea,
     foreign key (entrypoint_id, application_id, project_id) references entrypoint(id, application_id, project_id),
     primary key (version, entrypoint_id, application_id, project_id)
 );

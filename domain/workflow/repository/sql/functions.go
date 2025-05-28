@@ -68,7 +68,7 @@ func (r *repository) UpdateWorkflow(ctx context.Context, req *UpdateWorkflowRequ
 		Where("entrypoint_id = ?", req.Workflow.EntrypointID).
 		Where("version = ?", req.Workflow.Version)
 
-	if err := session.Select("Data").Updates(req.Workflow).Error; err != nil {
+	if err := session.Select("DataBytes").Updates(req.Workflow).Error; err != nil {
 		return err
 	}
 
