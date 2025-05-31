@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/ideagate/core v0.0.0-20250405234934-b97c52ec982f
-	github.com/ideagate/model/gen-go v0.0.12
+	github.com/ideagate/model/gen-go v0.0.13
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/jackc/pgtype v1.14.0
 	github.com/stretchr/testify v1.9.0

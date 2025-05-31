@@ -5,7 +5,7 @@ create table if not exists application (
     updated_at timestamptz not null default now(),
     name varchar(50) not null,
     description text not null,
-    primary key (id, project_id)
+    primary key (project_id, id)
 );
 
 drop type if exists entrypoint_type;
@@ -21,8 +21,8 @@ create table if not exists entrypoint (
     name varchar(255),
     description text,
     settings jsonb not null default '{}',
-    foreign key (application_id, project_id) references application(id, project_id),
-    primary key (id, application_id, project_id)
+    foreign key (project_id, application_id) references application(project_id, id),
+    primary key (project_id, application_id, id)
 );
 
 create table if not exists workflow (
@@ -33,6 +33,6 @@ create table if not exists workflow (
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
     data_bytes bytea,
-    foreign key (entrypoint_id, application_id, project_id) references entrypoint(id, application_id, project_id),
-    primary key (version, entrypoint_id, application_id, project_id)
+    foreign key (project_id, application_id, entrypoint_id) references entrypoint(project_id, application_id, id),
+    primary key (project_id, application_id, entrypoint_id, version)
 );

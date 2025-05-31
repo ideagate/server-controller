@@ -217,6 +217,8 @@ github.com/ideagate/core v0.0.0-20250405234934-b97c52ec982f h1:qBzD+diZCrmeMc1iF
 github.com/ideagate/core v0.0.0-20250405234934-b97c52ec982f/go.mod h1:BMtsNY436ios3Itf6naWavXmTt7RfTzt4HOAU2wymJY=
 github.com/ideagate/model/gen-go v0.0.12 h1:R7u18faUkUNqxfnAQNuvksfG8qWTI91FT5JbYznWUV0=
 github.com/ideagate/model/gen-go v0.0.12/go.mod h1:yDi/2xwjTEV4IrYUk+M69hhvySZZqmHJ/Ec5n0bqB14=
+github.com/ideagate/model/gen-go v0.0.13 h1:Mr4XjXWgxeSWT9GMswkblbJ913nVoQzNGzwKVDBN1Nw=
+github.com/ideagate/model/gen-go v0.0.13/go.mod h1:yDi/2xwjTEV4IrYUk+M69hhvySZZqmHJ/Ec5n0bqB14=
 github.com/improbable-eng/grpc-web v0.15.0 h1:BN+7z6uNXZ1tQGcNAuaU1YjsLTApzkjt2tzCixLaUPQ=
 github.com/improbable-eng/grpc-web v0.15.0/go.mod h1:1sy9HKV4Jt9aEs9JSnkWlRJPuPtwNr0l57L4f878wP8=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
