@@ -15,6 +15,7 @@ import (
 	"github.com/ideagate/server-controller/domain/workflow"
 	"github.com/ideagate/server-controller/infrastructure"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -54,7 +55,7 @@ func Action(_ *cli.Context) error {
 	reflection.Register(s)
 
 	go func() {
-		fmt.Println("gRPC server is running on port 50051")
+		logrus.Infoln("gRPC server is running on port 50051")
 		if err := s.Serve(lisGrpc); err != nil {
 			fmt.Errorf("failed to serve: %v", err)
 		}
@@ -73,7 +74,7 @@ func Action(_ *cli.Context) error {
 	}
 
 	go func() {
-		fmt.Println("gRPC web server is running on port 50052")
+		logrus.Infoln("gRPC web server is running on port 50052")
 		if err := httpServer.Serve(lisGrpcWeb); err != nil {
 			fmt.Errorf("failed to serve: %v", err)
 		}
